@@ -1,0 +1,197 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  RECEPTIONNISTE
+  TECHNICIEN
+  ADMIN
+  VIGILE
+}
+
+enum TypeIntervention {
+  DIAGNOSTIC
+  REPARATION
+  ENTRETIEN
+  TOLERIE
+}
+
+enum StatutDossier {
+  ENTRE
+  EN_DIAGNOSTIC
+  DEVIS_ENVOYE
+  DEVIS_ACCEPTE
+  DEVIS_REFUSE
+  EN_COURS
+  PRET
+  SORTI
+  ANNULE
+}
+
+enum StatutPaiement {
+  NON_SOLDE
+  PARTIEL
+  SOLDE
+}
+
+enum ModePaiement {
+  ESPECES
+  CHEQUE
+  VIREMENT
+  CARTE
+}
+
+enum StatutBS {
+  VALIDE
+  UTILISE
+  ANNULE
+}
+
+enum TypeClient {
+  PARTICULIER
+  ETAT
+  ENTREPRISE
+}
+
+model User {
+  id           String   @id @default(cuid())
+  nom          String
+  email        String   @unique
+  passwordHash String
+  role         Role
+  actif        Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  dossiersAssignes Dossier[]          @relation("TechnicienDossier")
+  derogations      BonDeSortie[]      @relation("DerogationPar")
+  historique       HistoriqueStatut[]
+}
+
+model Client {
+  id            String     @id @default(cuid())
+  nom           String
+  telephone     String
+  email         String?
+  cin           String?
+  type          TypeClient @default(PARTICULIER)
+  raisonSociale String?
+  ice           String?
+  createdAt     DateTime   @default(now())
+
+  vehicules Vehicule[]
+
+  @@index([telephone])
+  @@index([nom])
+}
+
+model Vehicule {
+  id              String   @id @default(cuid())
+  immatriculation String   @unique
+  marque          String
+  modele          String
+  annee           Int?
+  couleur         String?
+  kilometrage     Int?
+  clientId        String
+  client          Client   @relation(fields: [clientId], references: [id])
+  createdAt       DateTime @default(now())
+
+  dossiers Dossier[]
+
+  @@index([immatriculation])
+}
+
+model Dossier {
+  id                     String             @id @default(cuid())
+  numero                 String             @unique
+  vehiculeId             String
+  vehicule               Vehicule           @relation(fields: [vehiculeId], references: [id])
+  typesIntervention      TypeIntervention[]
+  statut                 StatutDossier      @default(ENTRE)
+  motifDeclare           String
+  descriptionTravaux     String?
+  observationsTechnicien String?
+
+  dateEntree       DateTime  @default(now())
+  datePrevueSortie DateTime?
+  dateSortieReelle DateTime?
+
+  technicienId String?
+  technicien   User?   @relation("TechnicienDossier", fields: [technicienId], references: [id])
+
+  montantTotal   Decimal        @default(0) @db.Decimal(10, 2)
+  statutPaiement StatutPaiement @default(NON_SOLDE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bonsDeSortie    BonDeSortie[]
+  factures        Facture[]
+  piecesUtilisees PieceUtilisee[]
+  historique      HistoriqueStatut[]
+
+  @@index([statut])
+  @@index([numero])
+}
+
+model BonDeSortie {
+  id        String   @id @default(cuid())
+  numero    String   @unique
+  dossierId String
+  dossier   Dossier  @relation(fields: [dossierId], references: [id])
+  qrToken   String   @unique
+  statut    StatutBS @default(VALIDE)
+
+  dateGeneration  DateTime  @default(now())
+  dateUtilisation DateTime?
+
+  derogationPaiement Boolean @default(false)
+  derogationMotif    String?
+  derogationParId    String?
+  derogationPar      User?   @relation("DerogationPar", fields: [derogationParId], references: [id])
+
+  @@index([qrToken])
+}
+
+model Facture {
+  id             String         @id @default(cuid())
+  numero         String         @unique
+  dossierId      String
+  dossier        Dossier        @relation(fields: [dossierId], references: [id])
+  montantHT      Decimal        @db.Decimal(10, 2)
+  tauxTVA        Decimal        @default(20) @db.Decimal(5, 2)
+  montantTTC     Decimal        @db.Decimal(10, 2)
+  statutPaiement StatutPaiement @default(NON_SOLDE)
+  modePaiement   ModePaiement?
+  datePaiement   DateTime?
+  createdAt      DateTime       @default(now())
+}
+
+model PieceUtilisee {
+  id           String  @id @default(cuid())
+  dossierId    String
+  dossier      Dossier @relation(fields: [dossierId], references: [id])
+  nomPiece     String
+  reference    String?
+  quantite     Int     @default(1)
+  prixUnitaire Decimal @db.Decimal(10, 2)
+}
+
+model HistoriqueStatut {
+  id          String         @id @default(cuid())
+  dossierId   String
+  dossier     Dossier        @relation(fields: [dossierId], references: [id])
+  statutAvant StatutDossier?
+  statutApres StatutDossier
+  userId      String
+  user        User           @relation(fields: [userId], references: [id])
+  commentaire String?
+  createdAt   DateTime       @default(now())
+
+  @@index([dossierId])
+}
