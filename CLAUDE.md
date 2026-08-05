@@ -29,7 +29,8 @@ Types d'interventions traitées :
 
 1. Centraliser la gestion des dossiers véhicules
 2. Sécuriser la sortie via un Bon de Sortie (BS) vérifiable
-3. Donner au gérant une vision business exploitable
+3. Offrir à toute l'équipe (réceptionniste, technicien, admin) une meilleure traçabilité et organisation du travail quotidien
+4. Donner au gérant une vision business exploitable
 
 ---
 
@@ -288,6 +289,8 @@ Middleware Next.js pour le routing **et** vérification dans chaque Server Actio
 
 7. **Numérotation séquentielle** — `DOS-2026-XXXX`, `BS-2026-XXXX`, `FACT-2026-XXXX` générés séquentiellement par année, sans trou, via transaction (éviter les collisions).
 
+8. **Fiche d'intervention automatique** — générée dès la création du dossier (statut `ENTRE`), à partir des champs existants de `Dossier` (numéro, immatriculation, motif, types d'intervention). Document purement informatif (pas de QR, aucune valeur d'autorisation, contrairement au BS), destiné à être imprimé et placé dans le véhicule pour que tout technicien sache immédiatement ce qui est attendu.
+
 ---
 
 ## 6. ÉCRAN `/verification` — spécification
@@ -325,7 +328,7 @@ app/
   api/verification/route.ts   → endpoint scan (POST)
 lib/
   auth/                       → session, hashing, guards
-  services/                   → logique métier (dossier.service.ts, bs.service.ts)
+  services/                   → logique métier (dossier.service.ts, bs.service.ts, fiche.service.ts)
   validations/                → schémas Zod
   utils/
 components/
@@ -347,7 +350,7 @@ prisma/
 ## 8. PÉRIMÈTRE
 
 **MVP (à développer) :**
-Auth + rôles · Clients & Véhicules · Dossiers + Kanban · Bon de Sortie (PDF + QR) · Écran vérification · Facturation · Dashboard · Historique véhicule
+Auth + rôles · Clients & Véhicules · Dossiers + Kanban · Fiche d'intervention (PDF, à l'entrée) · Bon de Sortie (PDF + QR) · Écran vérification · Facturation · Dashboard · Historique véhicule
 
 **V2 (NE PAS développer sauf demande explicite) :**
 Stock détaillé · Planning technicien avancé · Notifications SMS/WhatsApp réelles · Mode LAN sans internet · Système de licence · Multi-garage · App mobile native

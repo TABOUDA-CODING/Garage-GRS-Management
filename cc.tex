@@ -1,0 +1,842 @@
+\documentclass[11pt,a4paper]{report}
+
+% ===================== PACKAGES =====================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.multipart,fit,backgrounds,calc,shadows}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{rotating}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage[skins,breakable]{tcolorbox}
+\usepackage{hyperref}
+\usepackage{parskip}
+
+% ===================== CHAMPS À COMPLÉTER =====================
+% Renseignez ces champs avant compilation (informations académiques).
+\newcommand{\ecoleNom}{École Marocaine des Sciences de l'Ingénieur}
+\newcommand{\ecoleSigle}{EMSI}
+\newcommand{\villeEcole}{Casablanca --- Campus Oranger}
+\newcommand{\filiereEtud}{Développement des Systèmes d'Information (DSI) --- 4\textsuperscript{e} année}
+\newcommand{\anneeUniv}{2025 -- 2026}
+\newcommand{\nomEtudiant}{Marwan Saadouni}
+\newcommand{\typeProjet}{Stage de fin d'année}
+
+% ===================== COULEURS =====================
+\definecolor{km0blue}{RGB}{22,52,89}
+\definecolor{km0orange}{RGB}{224,122,29}
+\definecolor{km0green}{RGB}{45,134,89}
+\definecolor{km0red}{RGB}{178,34,34}
+\definecolor{km0gray}{RGB}{240,242,245}
+\definecolor{km0graytext}{RGB}{90,98,110}
+
+% ===================== TITRES =====================
+\titleformat{\chapter}[hang]{\normalfont\Huge\bfseries\color{km0blue}}{\thechapter.}{20pt}{\Huge}
+\titleformat{\section}{\normalfont\Large\bfseries\color{km0blue}}{\thesection}{10pt}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{km0blue}}{\thesubsection}{8pt}{}
+
+% ===================== EN-TETES =====================
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small\textcolor{km0graytext}{KM0 --- Cahier des charges}}
+\fancyhead[R]{\small\textcolor{km0graytext}{\leftmark}}
+\fancyfoot[C]{\small\thepage}
+
+% ===================== HYPERREF =====================
+\hypersetup{
+    colorlinks=true,
+    linkcolor=km0blue,
+    citecolor=km0blue,
+    urlcolor=km0blue,
+    pdftitle={KM0 - Cahier des charges},
+    pdfauthor={Garage KM0}
+}
+
+% ===================== ENVIRONNEMENTS UTILES =====================
+\newtcolorbox{regle}[2]{
+  enhanced, breakable,
+  colback=km0blue!4, colframe=km0blue,
+  colbacktitle=km0blue, coltitle=white,
+  fonttitle=\bfseries,
+  title={Règle #1 --- #2},
+  boxrule=0.6pt, arc=2pt, top=5pt, bottom=5pt, left=7pt, right=7pt,
+  before skip=8pt, after skip=8pt
+}
+
+\newcommand{\etat}[3]{%
+  % #1 = texte, #2 = couleur, #3 = position tikz optionnelle
+  \tikz[baseline=-0.6ex]\node[rectangle,rounded corners=2pt,fill=#2!15,draw=#2,thick,inner sep=3pt]{\textcolor{#2!70!black}{\textbf{#1}}};%
+}
+
+% ===================== DOCUMENT =====================
+\begin{document}
+
+% --------------------------------------------------------------
+% PAGE DE GARDE
+% --------------------------------------------------------------
+\begin{titlepage}
+\centering
+
+% ---- Bandeau supérieur : logo ----
+% Placez le fichier logo.png à la racine du projet Overleaf (même dossier que ce .tex).
+\includegraphics[width=4.6cm]{logo.png}
+
+\vspace{0.6cm}
+{\large\bfseries\color{km0blue} \ecoleNom}\\[0.1cm]
+{\normalsize\color{km0graytext} \ecoleSigle\ --- \villeEcole}\\[0.15cm]
+{\small\color{km0graytext} Filière~: \filiereEtud}\\[0.1cm]
+{\small\color{km0graytext}\bfseries \typeProjet}
+
+\vspace{0.4cm}
+\begin{tikzpicture}
+\draw[km0blue, line width=1pt] (-7,0) -- (7,0);
+\end{tikzpicture}
+
+\vspace{2cm}
+{\Huge\bfseries\color{km0blue} CAHIER DES CHARGES}\\[1.2cm]
+
+{\huge\bfseries\color{km0blue} KM0}\\[0.25cm]
+{\large\color{km0graytext} Système de gestion de garage automobile}
+
+\vspace{0.3cm}
+\begin{tikzpicture}
+\draw[km0orange, line width=1.4pt] (-1.8,0) -- (1.8,0);
+\end{tikzpicture}
+
+\vspace{0.4cm}
+{\color{km0graytext} Version 1.0}
+
+\vfill
+
+\begin{tikzpicture}
+\draw[km0blue!40, line width=0.6pt] (-7,0) -- (7,0);
+\end{tikzpicture}
+\vspace{0.5cm}
+
+\begin{tabularx}{0.85\linewidth}{@{}X X@{}}
+\textbf{Réalisé par~:} & \textbf{Encadré par~:} \\[0.15cm]
+\nomEtudiant & \\
+\end{tabularx}
+
+\vspace{1.2cm}
+{\small\color{km0graytext} \villeEcole\ --- Année universitaire \anneeUniv}
+
+\vspace{0.5cm}
+\end{titlepage}
+
+\tableofcontents
+\clearpage
+
+% ================================================================
+\chapter{Contexte et présentation du projet}
+% ================================================================
+
+\section{Présentation}
+
+\textbf{KM0} est une application web de gestion destinée à un garage automobile marocain
+travaillant à la fois pour des \textbf{particuliers} et pour des \textbf{institutions étatiques}.
+Elle a pour objectif de remplacer un suivi actuellement informel (papier, fichiers Excel,
+mémoire des employés) par un outil centralisé, traçable et sécurisé, couvrant l'intégralité
+du cycle de vie d'un véhicule pris en charge par le garage : de son entrée jusqu'à sa sortie.
+
+Le garage traite quatre grandes familles d'interventions :
+
+\begin{table}[h!]
+\centering
+\rowcolors{2}{km0gray}{white}
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+\toprule
+\rowcolor{km0blue}
+\textcolor{white}{\textbf{Type d'intervention}} & \textcolor{white}{\textbf{Description}} \\
+\midrule
+\textbf{Diagnostic} & Identification d'une panne ou d'un dysfonctionnement. \\
+\textbf{Réparation} & Intervention mécanique : moteur, transmission, etc. \\
+\textbf{Entretien} & Vidange, changement de filtres, révision périodique. \\
+\textbf{Tôlerie / Carrosserie} & Véhicules accidentés, redressage, peinture. \\
+\bottomrule
+\end{tabularx}
+\caption{Types d'interventions couvertes par le système}
+\end{table}
+
+Un même dossier peut cumuler plusieurs types d'intervention (par exemple un diagnostic
+suivi d'une réparation).
+
+\section{Problématique actuelle}
+
+Le fonctionnement actuel du garage repose sur des outils non structurés, ce qui engendre
+plusieurs difficultés opérationnelles :
+
+\begin{table}[h!]
+\centering
+\rowcolors{2}{km0gray}{white}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+\rowcolor{km0blue}
+\textcolor{white}{\textbf{Problème constaté}} & \textcolor{white}{\textbf{Conséquence}} \\
+\midrule
+Suivi papier / Excel / mémoire des employés & Aucune traçabilité, perte d'information \\
+Pas de contrôle formalisé à la sortie du véhicule & Véhicules sortis sans paiement ou sans autorisation \\
+Historique client dispersé & Impossible de savoir ce qui a été fait sur un véhicule \\
+Aucune visibilité pour le gérant & Pas de vue sur la charge de travail, le chiffre d'affaires, les délais \\
+\bottomrule
+\end{tabularx}
+\caption{Problèmes actuels et conséquences}
+\end{table}
+
+\section{Objectifs du projet}
+
+Le projet KM0 poursuit quatre objectifs principaux :
+
+\begin{enumerate}[label=\arabic*., leftmargin=1.2cm]
+\item \textbf{Centraliser} la gestion des dossiers véhicules, des clients et des interventions.
+\item \textbf{Sécuriser la sortie} des véhicules via un \emph{Bon de Sortie} (BS) vérifiable,
+      empêchant toute sortie non autorisée ou non payée.
+\item \textbf{Offrir à toute l'équipe une meilleure traçabilité et organisation} du travail
+      quotidien : chaque intervenant (réceptionniste, technicien, admin) sait à tout moment
+      ce qui doit être fait et ce qui a déjà été fait sur un dossier.
+\item \textbf{Donner au gérant une vision business exploitable} : charge de l'atelier,
+      chiffre d'affaires, délais de traitement.
+\end{enumerate}
+
+% ================================================================
+\chapter{Flux opérationnel}
+% ================================================================
+
+Cette section décrit la logique de bout en bout du traitement d'un véhicule, du dépôt
+par le client jusqu'à sa sortie. C'est cette logique qui structure l'ensemble des
+fonctionnalités du système.
+
+\section{Vue d'ensemble}
+
+\begin{figure}[h!]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\begin{tikzpicture}[
+  step/.style={rectangle, rounded corners=3pt, draw=km0blue, thick, fill=km0blue!7,
+               minimum width=2.9cm, minimum height=1.1cm, align=center, font=\scriptsize},
+  final/.style={rectangle, rounded corners=3pt, draw=km0green, thick, fill=km0green!12,
+               minimum width=2.9cm, minimum height=1.1cm, align=center, font=\scriptsize},
+  arr/.style={-Stealth, thick, km0graytext}
+]
+\node[step] (arrivee) {Arrivée du véhicule};
+\node[step, right=1cm of arrivee] (dossier) {Création du dossier\\(réceptionniste)};
+\node[step, right=1cm of dossier] (fiche) {Fiche d'intervention\\générée};
+\node[step, right=1cm of fiche] (charge) {Prise en charge\\(technicien)};
+\node[step, right=1cm of charge] (avance) {Avancement\\(Kanban)};
+\node[final, right=1cm of avance] (sortie) {BS $\rightarrow$ Sortie};
+
+\draw[arr] (arrivee) -- (dossier);
+\draw[arr] (dossier) -- (fiche);
+\draw[arr] (fiche) -- (charge);
+\draw[arr] (charge) -- (avance);
+\draw[arr] (avance) -- (sortie);
+\end{tikzpicture}
+\end{adjustbox}
+\caption{Logique de bout en bout du traitement d'un véhicule}
+\end{figure}
+
+\section{Prise en charge et fiche d'intervention}
+
+Dès la création du dossier, le système génère automatiquement une \textbf{fiche
+d'intervention} : un document résumé, imprimable, destiné à être placé physiquement
+dans le véhicule (pare-brise ou tableau de bord). Son rôle est de donner à tout
+technicien qui prend le véhicule en charge une vision immédiate de ce qui est attendu,
+sans avoir à consulter le système pour les informations de base.
+
+\begin{itemize}[leftmargin=1cm]
+\item \textbf{Génération} : automatique, dès que le dossier passe au statut \texttt{ENTRE}.
+\item \textbf{Contenu} : numéro de dossier, immatriculation, marque/modèle, client,
+      motif déclaré, type(s) d'intervention demandée(s), date d'entrée.
+\item \textbf{Nature} : document purement informatif, sans QR code ni valeur d'autorisation
+      --- à la différence du Bon de Sortie, il ne conditionne aucune action.
+\item \textbf{Source des données} : aucune nouvelle entité n'est nécessaire, la fiche est
+      générée directement à partir des champs existants du modèle \texttt{Dossier}.
+\end{itemize}
+
+Une fois le véhicule pris en charge, son avancement (diagnostic, devis, réparation,
+prêt) est visible en temps réel dans la vue Kanban de l'atelier et tracé dans
+l'historique du dossier (voir chapitre \ref{ch:regles}).
+
+% ================================================================
+\chapter{Périmètre du projet}
+% ================================================================
+
+\section{Fonctionnalités couvertes}
+
+Le projet couvre l'ensemble du cycle de vie d'un dossier :
+
+\begin{itemize}[leftmargin=1cm]
+\item Authentification et gestion des rôles
+\item Gestion des clients et des véhicules
+\item Gestion des dossiers et vue Kanban de l'atelier
+\item Génération automatique d'une fiche d'intervention à la prise en charge du véhicule
+\item Génération du Bon de Sortie (PDF + QR code)
+\item Écran de vérification de sortie (scan QR)
+\item Facturation
+\item Tableau de bord de synthèse
+\item Historique complet par véhicule
+\end{itemize}
+
+% ================================================================
+\chapter{Architecture technique}
+% ================================================================
+
+\section{Stack technique}
+
+\begin{table}[h!]
+\centering
+\rowcolors{2}{km0gray}{white}
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+\toprule
+\rowcolor{km0blue}
+\textcolor{white}{\textbf{Composant}} & \textcolor{white}{\textbf{Technologie}} \\
+\midrule
+Framework applicatif & Next.js 15 (App Router) + TypeScript (mode strict) \\
+Base de données & PostgreSQL 16 \\
+ORM & Prisma 6 \\
+Interface utilisateur & Tailwind CSS + shadcn/ui \\
+Authentification & Session personnalisée (cookies \texttt{httpOnly} + \texttt{bcrypt}) \\
+Génération PDF & \texttt{@react-pdf/renderer} \\
+QR Code & \texttt{qrcode} (génération) + \texttt{html5-qrcode} (lecture navigateur) \\
+Validation des données & Zod \\
+Gestion des dates & \texttt{date-fns} (locale \texttt{fr}) \\
+Tests & Vitest \\
+\bottomrule
+\end{tabularx}
+\caption{Stack technique retenue}
+\end{table}
+
+\section{Contraintes techniques}
+
+\begin{itemize}[leftmargin=1cm]
+\item \textbf{Aucune dépendance cloud tierce} pour l'authentification (pas de Clerk, Auth0,
+      Supabase Auth) : l'application doit rester autonome.
+\item Les \textbf{Server Actions} sont privilégiées par rapport aux routes API, à l'exception
+      de l'endpoint de vérification du Bon de Sortie, qui doit rester accessible via une route
+      API classique pour être appelable par le scanner.
+\item Aucun type \texttt{any} n'est toléré en TypeScript ; la commande \texttt{tsc --noEmit}
+      doit systématiquement passer sans erreur.
+\end{itemize}
+
+\section{Schéma d'architecture}
+
+\begin{figure}[h!]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\begin{tikzpicture}[
+  box/.style={rectangle, rounded corners=3pt, draw=km0blue, thick, fill=km0blue!6,
+              minimum width=3.4cm, minimum height=1.1cm, align=center, font=\small},
+  boxalt/.style={rectangle, rounded corners=3pt, draw=km0orange, thick, fill=km0orange!8,
+              minimum width=3.4cm, minimum height=1.1cm, align=center, font=\small},
+  db/.style={cylinder, shape border rotate=90, aspect=0.25, draw=km0blue, thick,
+             fill=km0blue!10, minimum width=2.6cm, minimum height=1.4cm, align=center, font=\small},
+  arr/.style={-Stealth, thick, km0graytext}
+]
+\node[box] (client) {Navigateur\\(réceptionniste, technicien, admin)};
+\node[boxalt, right=2.4cm of client] (vigile) {Tablette guérite\\(vigile)};
+
+\node[box, below=1.3cm of $(client)!0.5!(vigile)$, minimum width=6.5cm] (next) {Next.js 15 --- App Router\\Server Actions};
+\node[boxalt, below=0.55cm of next, minimum width=6.5cm] (api) {\texttt{/api/verification} (route API)};
+
+\node[box, below=0.9cm of api, xshift=-2.6cm] (prisma) {Prisma ORM};
+\node[box, below=0.9cm of api, xshift=2.6cm] (services) {Services métier\\(\texttt{lib/services})};
+
+\node[db, below=1.1cm of $(prisma)!0.5!(services)$] (pg) {PostgreSQL 16};
+
+\node[boxalt, right=2.8cm of services] (pdf) {PDF + QR\\(BS)};
+
+\draw[arr] (client) -- (next);
+\draw[arr] (vigile) -- (api);
+\draw[arr] (next) -- (api);
+\draw[arr] (next) -- (services);
+\draw[arr] (api) -- (services);
+\draw[arr] (services) -- (prisma);
+\draw[arr] (prisma) -- (pg);
+\draw[arr] (services) -- (pdf);
+\end{tikzpicture}
+\end{adjustbox}
+\caption{Architecture applicative simplifiée}
+\end{figure}
+
+% ================================================================
+\chapter{Modèle de données}
+% ================================================================
+
+\section{Diagramme entité-relation}
+
+\begin{sidewaysfigure}[p]
+\centering
+\resizebox{\textheight}{!}{%
+\begin{tikzpicture}[
+  entity/.style={rectangle, draw=km0blue, thick, fill=white, rounded corners=2pt,
+                 align=left, font=\footnotesize, drop shadow},
+  title/.style={font=\bfseries\small\color{white}, fill=km0blue},
+  rel/.style={-Stealth, thick, km0graytext, font=\scriptsize},
+  every node/.style={inner sep=4pt}
+]
+
+% ---- User ----
+\node[entity] (user) at (0,7) {
+  \begin{tabular}{@{}l@{}}
+  \multicolumn{1}{c}{\cellcolor{km0blue}\textcolor{white}{\textbf{User}}}\\
+  id, nom, email\\ passwordHash, role\\ actif
+  \end{tabular}
+};
+
+% ---- Client ----
+\node[entity] (client) at (11,9) {
+  \begin{tabular}{@{}l@{}}
+  \multicolumn{1}{c}{\cellcolor{km0blue}\textcolor{white}{\textbf{Client}}}\\
+  id, nom, telephone\\ email, cin, type\\ raisonSociale, ice
+  \end{tabular}
+};
+
+% ---- Vehicule ----
+\node[entity] (vehicule) at (11,6) {
+  \begin{tabular}{@{}l@{}}
+  \multicolumn{1}{c}{\cellcolor{km0blue}\textcolor{white}{\textbf{Vehicule}}}\\
+  id, immatriculation\\ marque, modele, annee\\ couleur, kilometrage
+  \end{tabular}
+};
+
+% ---- Dossier (hub central) ----
+\node[entity, fill=km0blue!8] (dossier) at (11,2.5) {
+  \begin{tabular}{@{}l@{}}
+  \multicolumn{1}{c}{\cellcolor{km0blue}\textcolor{white}{\textbf{Dossier}}}\\
+  id, numero\\ typesIntervention[]\\ statut, motifDeclare\\
+  dateEntree, datePrevueSortie\\ dateSortieReelle\\
+  montantTotal, statutPaiement
+  \end{tabular}
+};
+
+% ---- BonDeSortie ----
+\node[entity] (bs) at (0,3.6) {
+  \begin{tabular}{@{}l@{}}
+  \multicolumn{1}{c}{\cellcolor{km0blue}\textcolor{white}{\textbf{BonDeSortie}}}\\
+  id, numero, qrToken\\ statut\\ dateGeneration\\ dateUtilisation\\
+  derogationPaiement\\ derogationMotif
+  \end{tabular}
+};
+
+% ---- Facture ----
+\node[entity] (facture) at (20,4.5) {
+  \begin{tabular}{@{}l@{}}
+  \multicolumn{1}{c}{\cellcolor{km0blue}\textcolor{white}{\textbf{Facture}}}\\
+  id, numero\\ montantHT, tauxTVA\\ montantTTC\\
+  statutPaiement\\ modePaiement, datePaiement
+  \end{tabular}
+};
+
+% ---- PieceUtilisee ----
+\node[entity] (piece) at (20,1.6) {
+  \begin{tabular}{@{}l@{}}
+  \multicolumn{1}{c}{\cellcolor{km0blue}\textcolor{white}{\textbf{PieceUtilisee}}}\\
+  id, nomPiece, reference\\ quantite, prixUnitaire
+  \end{tabular}
+};
+
+% ---- HistoriqueStatut ----
+\node[entity] (hist) at (11,-0.8) {
+  \begin{tabular}{@{}l@{}}
+  \multicolumn{1}{c}{\cellcolor{km0blue}\textcolor{white}{\textbf{HistoriqueStatut}}}\\
+  id, statutAvant, statutApres\\ commentaire, createdAt
+  \end{tabular}
+};
+
+% ---- Relations ----
+\draw[rel] (client) -- (vehicule) node[midway, above, sloped]{1 -- N};
+\draw[rel] (vehicule) -- (dossier) node[midway, right]{1 -- N};
+\draw[rel] (dossier) -- (bs) node[midway, above, sloped]{1 -- N};
+\draw[rel] (dossier) -- (facture) node[midway, above, sloped]{1 -- N};
+\draw[rel] (dossier) -- (piece) node[midway, below, sloped]{1 -- N};
+\draw[rel] (dossier) -- (hist) node[midway, right]{1 -- N};
+\draw[rel] (user) -- (dossier) node[midway, above, sloped, xshift=-0.4cm]{1 -- N (technicien, optionnel)};
+\draw[rel] (user) -- (hist) node[midway, below, sloped]{1 -- N (auteur)};
+\draw[rel] (user) -- (bs) node[midway, left]{1 -- N (dérogation, optionnel)};
+
+\end{tikzpicture}%
+}
+\caption{Diagramme entité-relation du modèle KM0}
+\end{sidewaysfigure}
+
+\section{Description des entités principales}
+
+\begin{table}[h!]
+\centering
+\rowcolors{2}{km0gray}{white}
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+\toprule
+\rowcolor{km0blue}
+\textcolor{white}{\textbf{Entité}} & \textcolor{white}{\textbf{Rôle}} \\
+\midrule
+\textbf{User} & Compte utilisateur interne (réceptionniste, technicien, admin, vigile). \\
+\textbf{Client} & Particulier, entreprise ou institution étatique propriétaire de véhicules. \\
+\textbf{Vehicule} & Véhicule rattaché à un client, identifié par son immatriculation. \\
+\textbf{Dossier} & Intervention en cours ou passée sur un véhicule ; entité centrale du système. \\
+\textbf{BonDeSortie} & Autorisation de sortie du véhicule, matérialisée par un QR code unique. \\
+\textbf{Facture} & Document de facturation rattaché à un dossier. \\
+\textbf{PieceUtilisee} & Pièce détachée consommée dans le cadre d'un dossier. \\
+\textbf{HistoriqueStatut} & Trace d'audit de chaque changement de statut d'un dossier. \\
+\bottomrule
+\end{tabularx}
+\caption{Rôle de chaque entité du modèle}
+\end{table}
+
+\section{Énumérations}
+
+\begin{table}[h!]
+\centering
+\rowcolors{2}{km0gray}{white}
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+\toprule
+\rowcolor{km0blue}
+\textcolor{white}{\textbf{Énumération}} & \textcolor{white}{\textbf{Valeurs possibles}} \\
+\midrule
+\texttt{Role} & \texttt{RECEPTIONNISTE}, \texttt{TECHNICIEN}, \texttt{ADMIN}, \texttt{VIGILE} \\
+\texttt{TypeIntervention} & \texttt{DIAGNOSTIC}, \texttt{REPARATION}, \texttt{ENTRETIEN}, \texttt{TOLERIE} \\
+\texttt{StatutDossier} & \texttt{ENTRE}, \texttt{EN\_DIAGNOSTIC}, \texttt{DEVIS\_ENVOYE}, \texttt{DEVIS\_ACCEPTE}, \texttt{DEVIS\_REFUSE}, \texttt{EN\_COURS}, \texttt{PRET}, \texttt{SORTI}, \texttt{ANNULE} \\
+\texttt{StatutPaiement} & \texttt{NON\_SOLDE}, \texttt{PARTIEL}, \texttt{SOLDE} \\
+\texttt{ModePaiement} & \texttt{ESPECES}, \texttt{CHEQUE}, \texttt{VIREMENT}, \texttt{CARTE} \\
+\texttt{StatutBS} & \texttt{VALIDE}, \texttt{UTILISE}, \texttt{ANNULE} \\
+\texttt{TypeClient} & \texttt{PARTICULIER}, \texttt{ETAT}, \texttt{ENTREPRISE} \\
+\bottomrule
+\end{tabularx}
+\caption{Énumérations du modèle de données}
+\end{table}
+
+% ================================================================
+\chapter{Rôles et permissions}
+% ================================================================
+
+Le contrôle d'accès repose sur quatre rôles distincts. Il est appliqué à deux niveaux :
+via le middleware Next.js pour le routage, et systématiquement à l'intérieur de chaque
+Server Action (défense en profondeur).
+
+\begin{table}[h!]
+\centering
+\rowcolors{2}{km0gray}{white}
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+\toprule
+\rowcolor{km0blue}
+\textcolor{white}{\textbf{Rôle}} & \textcolor{white}{\textbf{Permissions}} \\
+\midrule
+\textbf{RECEPTIONNISTE} & Créer et éditer clients, véhicules, dossiers. Voir tous les dossiers.
+Encaisser les paiements. \textbf{Ne peut pas} générer de Bon de Sortie. \\
+\textbf{TECHNICIEN} & Voir les dossiers qui lui sont assignés. Changer le statut
+(\texttt{EN\_DIAGNOSTIC} $\rightarrow$ \texttt{EN\_COURS} $\rightarrow$ \texttt{PRET}).
+Ajouter des observations et des pièces utilisées. \\
+\textbf{ADMIN} & Accès total. Génération du Bon de Sortie. Dérogations de paiement.
+Consultation des statistiques. Gestion des utilisateurs. Régénération d'un BS perdu. \\
+\textbf{VIGILE} & Accès \textbf{exclusif} à l'écran \texttt{/verification}. Redirection forcée
+depuis toute autre route. Aucune donnée financière visible. \\
+\bottomrule
+\end{tabularx}
+\caption{Matrice des rôles et permissions}
+\end{table}
+
+% ================================================================
+\chapter{Règles métier critiques}
+\label{ch:regles}
+% ================================================================
+
+Les règles suivantes sont \textbf{non négociables} : elles conditionnent l'intégrité et la
+sécurité du processus de sortie des véhicules.
+
+\begin{regle}{1}{Statut \texttt{SORTI} automatique uniquement}
+Le statut \texttt{SORTI} n'est posé \textbf{que} via le scan du Bon de Sortie sur l'écran
+\texttt{/verification}. Aucune interface ne permet de le poser manuellement.
+\end{regle}
+
+\begin{regle}{2}{Génération du BS conditionnée}
+Le bouton de génération n'est visible que si le dossier est au statut \texttt{PRET}.
+Si le statut de paiement n'est pas \texttt{SOLDE}, la génération est bloquée, sauf
+dérogation d'un Admin (motif obligatoire, 10 caractères minimum, tracé dans le système).
+\end{regle}
+
+\begin{regle}{3}{Usage unique du BS}
+Au moment du scan, le passage au statut \texttt{UTILISE} est effectué de manière atomique
+(transaction Prisma). Un même QR code ne peut jamais autoriser deux sorties, même en cas
+de double scan simultané.
+\end{regle}
+
+\begin{regle}{4}{Régénération d'un BS perdu}
+En cas de perte, seul un Admin peut générer un nouveau Bon de Sortie ; l'ancien passe au
+statut \texttt{ANNULE} dans la même transaction.
+\end{regle}
+
+\begin{regle}{5}{Multi-intervention, BS unique}
+Un dossier peut cumuler plusieurs types d'intervention (\texttt{typesIntervention}), mais
+ne génère jamais qu'un seul Bon de Sortie.
+\end{regle}
+
+\begin{regle}{6}{Audit trail obligatoire}
+Tout changement de statut est écrit dans \texttt{HistoriqueStatut} avec l'utilisateur
+responsable. Ce mécanisme est implémenté au niveau du service métier et n'est pas
+contournable depuis l'interface.
+\end{regle}
+
+\begin{regle}{7}{Numérotation séquentielle}
+Les identifiants \texttt{DOS-2026-XXXX}, \texttt{BS-2026-XXXX} et \texttt{FACT-2026-XXXX}
+sont générés séquentiellement par année, sans trou, via une transaction dédiée afin
+d'éviter toute collision.
+\end{regle}
+
+\section{Machine à états du dossier}
+
+\begin{figure}[h!]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\begin{tikzpicture}[
+  st/.style={rectangle, rounded corners=3pt, draw=km0blue, thick, fill=km0blue!7,
+             minimum width=2.6cm, minimum height=0.9cm, align=center, font=\scriptsize},
+  final/.style={rectangle, rounded corners=3pt, draw=km0green, thick, fill=km0green!12,
+             minimum width=2.6cm, minimum height=0.9cm, align=center, font=\scriptsize},
+  cancel/.style={rectangle, rounded corners=3pt, draw=km0red, thick, fill=km0red!10,
+             minimum width=2.6cm, minimum height=0.9cm, align=center, font=\scriptsize},
+  tr/.style={-Stealth, thick, km0graytext, font=\tiny},
+  trc/.style={-Stealth, thick, km0red!70, dashed, font=\tiny}
+]
+\node[st] (entre) {ENTRE};
+\node[st, right=1.1cm of entre] (diag) {EN\_DIAGNOSTIC};
+\node[st, right=1.1cm of diag] (devis) {DEVIS\_ENVOYE};
+\node[st, above right=0.7cm and 1.3cm of devis] (accepte) {DEVIS\_ACCEPTE};
+\node[st, below right=0.7cm and 1.3cm of devis] (refuse) {DEVIS\_REFUSE};
+\node[st, right=1.6cm of accepte] (cours) {EN\_COURS};
+\node[st, right=1.1cm of cours] (pret) {PRET};
+\node[final, right=1.4cm of pret] (sorti) {SORTI};
+\node[cancel, below=1.6cm of devis] (annule) {ANNULE};
+
+\draw[tr] (entre) -- (diag);
+\draw[tr] (diag) -- (devis);
+\draw[tr] (devis) -- (accepte);
+\draw[tr] (devis) -- (refuse);
+\draw[tr] (accepte) -- (cours);
+\draw[tr] (cours) -- (pret);
+\draw[tr] (pret) -- node[above, font=\tiny\bfseries, text=km0green]{scan BS} (sorti);
+
+\draw[trc] (diag) -- (annule);
+\draw[trc] (devis) -- (annule);
+\draw[trc] (refuse) -- (annule);
+\draw[trc] (cours) -- (annule);
+\end{tikzpicture}
+\end{adjustbox}
+\caption{Transitions de statut autorisées pour un dossier (traits pleins = flux normal,
+traits pointillés rouges = annulation)}
+\end{figure}
+
+Toute transition de statut, y compris vers \texttt{ANNULE}, déclenche une écriture dans
+\texttt{HistoriqueStatut} (règle 6). Seule la transition vers \texttt{SORTI} échappe aux
+interfaces classiques de changement de statut : elle est réservée à l'endpoint de
+vérification (règle 1).
+
+% ================================================================
+\chapter{Écran de vérification}
+% ================================================================
+
+\section{Contexte d'usage}
+
+L'écran \texttt{/verification} est l'écran le plus critique du système. Il est utilisé par
+un agent de sécurité \textbf{non technique}, sur tablette, dans une guérite. Son
+ergonomie doit donc privilégier la lisibilité et la simplicité absolue :
+
+\begin{itemize}[leftmargin=1cm]
+\item Champ de saisie en auto-focus, combiné à un scanner QR par caméra ou à une saisie manuelle du numéro.
+\item Typographie très large, lisible à 2 mètres de distance.
+\item Zéro jargon technique.
+\item Retour automatique à l'état de scan après 8 secondes.
+\end{itemize}
+
+\section{Logique de vérification}
+
+À chaque scan, le serveur exécute les vérifications suivantes, dans l'ordre :
+
+\begin{enumerate}[leftmargin=1.2cm]
+\item Le Bon de Sortie existe-t-il ?
+\item Son statut est-il \texttt{VALIDE} ?
+\item Le dossier associé est-il au statut \texttt{PRET} ?
+\item Le paiement est-il soldé, ou une dérogation a-t-elle été accordée ?
+\end{enumerate}
+
+\begin{table}[h!]
+\centering
+\rowcolors{2}{km0gray}{white}
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+\toprule
+\rowcolor{km0blue}
+\textcolor{white}{\textbf{État}} & \textcolor{white}{\textbf{Affichage}} \\
+\midrule
+\etat{VERT}{km0green} & « SORTIE AUTORISÉE » --- immatriculation en très grand, marque/modèle, client. \\
+\etat{ORANGE}{km0orange} & « SORTIE AUTORISÉE --- DÉROGATION » --- « Non payé, autorisé par [Admin] ». \\
+\etat{ROUGE}{km0red} & « SORTIE REFUSÉE » avec raison précise : facture non réglée, bon déjà
+utilisé (avec date), bon inconnu, ou véhicule non prêt. \\
+\bottomrule
+\end{tabularx}
+\caption{États d'affichage de l'écran de vérification}
+\end{table}
+
+\section{Diagramme de séquence --- génération et vérification du BS}
+
+\begin{figure}[h!]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\begin{tikzpicture}[
+  actor/.style={rectangle, draw=km0blue, thick, fill=km0blue!8, rounded corners=2pt,
+                minimum width=2.6cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  lifeline/.style={dashed, km0graytext},
+  msg/.style={-Stealth, thick, km0blue, font=\scriptsize},
+  msgret/.style={-Stealth, thick, km0graytext, dashed, font=\scriptsize},
+  note/.style={rectangle, draw=km0orange, fill=km0orange!8, rounded corners=2pt, font=\scriptsize, align=left, inner sep=4pt}
+]
+% Acteurs
+\node[actor] (admin) at (0,0) {Admin};
+\node[actor] (app) at (4.2,0) {Application\\(bs.service)};
+\node[actor] (bdd) at (8.4,0) {Base de\\données};
+\node[actor] (vigile) at (12.6,0) {Vigile};
+
+% Lifelines
+\draw[lifeline] (admin.south) -- ++(0,-11.5);
+\draw[lifeline] (app.south) -- ++(0,-11.5);
+\draw[lifeline] (bdd.south) -- ++(0,-11.5);
+\draw[lifeline] (vigile.south) -- ++(0,-11.5);
+
+% Phase 1 : génération
+\draw[msg] ($(admin.south)+(0,-1)$) -- node[above]{demande génération BS (dossier PRET)} ($(app.south)+(0,-1)$);
+\draw[msg] ($(app.south)+(0,-1.9)$) -- node[above]{vérifie statutPaiement} ($(bdd.south)+(0,-1.9)$);
+\draw[msgret] ($(bdd.south)+(0,-2.7)$) -- node[above]{SOLDE (ou dérogation)} ($(app.south)+(0,-2.7)$);
+\draw[msg] ($(app.south)+(0,-3.6)$) -- node[above]{crée BonDeSortie (qrToken, VALIDE)} ($(bdd.south)+(0,-3.6)$);
+\draw[msgret] ($(app.south)+(0,-4.6)$) -- node[above]{PDF A5 + QR code} ($(admin.south)+(0,-4.6)$);
+
+\node[note, align=center] at (4.2,-5.4) {\textit{-- temps écoulé : véhicule prêt à récupérer --}};
+
+% Phase 2 : vérification
+\draw[msg] ($(vigile.south)+(0,-6.4)$) -- node[above]{scan QR (qrToken)} ($(app.south)+(0,-6.4)$);
+
+\node[note] at (7,-7.6) {\textbf{Transaction atomique}\\BS existe ? statut VALIDE ?\\dossier PRET ? paiement soldé ?};
+
+\draw[msg] ($(app.south)+(0,-9)$) -- node[above]{lecture + vérifications} ($(bdd.south)+(0,-9)$);
+\draw[msg] ($(app.south)+(0,-9.8)$) -- node[above]{BS $\rightarrow$ UTILISE, Dossier $\rightarrow$ SORTI} ($(bdd.south)+(0,-9.8)$);
+\draw[msgret] ($(app.south)+(0,-10.8)$) -- node[above]{VERT / ORANGE / ROUGE} ($(vigile.south)+(0,-10.8)$);
+
+\end{tikzpicture}
+\end{adjustbox}
+\caption{Séquence complète : génération du BS puis vérification à la sortie}
+\end{figure}
+
+% ================================================================
+\chapter{Organisation du code}
+% ================================================================
+
+\section{Arborescence cible}
+
+\begin{figure}[h!]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\begin{tikzpicture}
+\node[draw=km0blue, fill=km0gray, rounded corners=3pt, inner sep=10pt, align=left, font=\ttfamily\footnotesize]{%
+\begin{tabular}{@{}l@{}}
+app/ \\
+\quad (auth)/login/ \\
+\quad (app)/dashboard/ \\
+\quad (app)/atelier/ \hfill\textcolor{km0graytext}{\% vue Kanban} \\
+\quad (app)/dossiers/[id]/ \\
+\quad (app)/clients/ \\
+\quad (app)/vehicules/ \\
+\quad (app)/factures/ \\
+\quad (app)/admin/ \\
+\quad verification/ \hfill\textcolor{km0graytext}{\% hors layout app, accès vigile} \\
+\quad api/verification/route.ts \hfill\textcolor{km0graytext}{\% endpoint scan (POST)} \\
+lib/ \\
+\quad auth/ \hfill\textcolor{km0graytext}{\% session, hashing, guards} \\
+\quad services/ \hfill\textcolor{km0graytext}{\% logique métier} \\
+\quad validations/ \hfill\textcolor{km0graytext}{\% schémas Zod} \\
+\quad utils/ \\
+components/ \\
+\quad ui/ \hfill\textcolor{km0graytext}{\% shadcn} \\
+\quad features/ \hfill\textcolor{km0graytext}{\% composants métier} \\
+prisma/ \\
+\end{tabular}
+};
+\end{tikzpicture}
+\end{adjustbox}
+\caption{Arborescence de dossiers du projet}
+\end{figure}
+
+\section{Conventions}
+
+\begin{itemize}[leftmargin=1cm]
+\item La logique métier réside exclusivement dans \texttt{lib/services/}, jamais dans les composants React.
+\item Toute Server Action valide ses entrées avec Zod avant traitement.
+\item Toute Server Action vérifie le rôle de l'utilisateur en première ligne.
+\item Nommage en français pour le domaine métier (\texttt{dossier}, \texttt{vehicule},
+      \texttt{bonDeSortie}), en anglais pour la technique (\texttt{getUser}, \texttt{formatDate}).
+\item Messages utilisateur en français ; journaux techniques (\emph{logs}) en anglais.
+\item Commits au format conventionnel : \texttt{feat:}, \texttt{fix:}, \texttt{chore:},
+      \texttt{test:}, \texttt{docs:}.
+\end{itemize}
+
+% ================================================================
+\chapter{Planning de réalisation}
+% ================================================================
+
+Le développement est organisé sur quatre semaines, à raison d'une tâche par jour ouvré.
+
+\begin{table}[h!]
+\centering
+\rowcolors{2}{km0gray}{white}
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+\toprule
+\rowcolor{km0blue}
+\textcolor{white}{\textbf{Semaine}} & \textcolor{white}{\textbf{Contenu}} \\
+\midrule
+\textbf{Semaine 1 --- Fondations} & Setup projet, authentification \& rôles, module clients,
+module véhicules, création de dossier. \\
+\textbf{Semaine 2 --- Cœur métier} & Vue Kanban de l'atelier, machine à états et audit,
+génération du Bon de Sortie, écran de vérification, facturation. \\
+\textbf{Semaine 3 --- Complétude et finition} & Tableau de bord, pièces \& détail dossier,
+administration, polish UI/UX, corrections. \\
+\textbf{Semaine 4 --- Tests et livraison} & Tests métier, tests de parcours de bout en bout,
+données de démonstration, documentation, finalisation. \\
+\bottomrule
+\end{tabularx}
+\caption{Planning de développement (détail complet dans \texttt{TASKS.md})}
+\end{table}
+
+% ================================================================
+\chapter{Annexe --- Glossaire}
+% ================================================================
+
+\begin{table}[h!]
+\centering
+\rowcolors{2}{km0gray}{white}
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+\toprule
+\rowcolor{km0blue}
+\textcolor{white}{\textbf{Terme}} & \textcolor{white}{\textbf{Définition}} \\
+\midrule
+\textbf{Dossier} & Fiche représentant une intervention sur un véhicule, du dépôt à la sortie. \\
+\textbf{Bon de Sortie (BS)} & Document autorisant la sortie physique d'un véhicule, muni d'un QR code à usage unique. \\
+\textbf{Fiche d'intervention} & Document résumé généré à l'entrée du véhicule, placé physiquement dans celui-ci, informant le technicien du travail demandé. \\
+\textbf{Dérogation} & Autorisation exceptionnelle accordée par un Admin pour sortir un véhicule non soldé. \\
+\textbf{Vigile} & Agent de sécurité chargé de contrôler les sorties de véhicules à la guérite. \\
+\textbf{Kanban} & Vue en colonnes représentant les dossiers selon leur statut d'avancement. \\
+\textbf{Institution étatique} & Client de type organisme public (véhicules de fonction, administrations). \\
+\bottomrule
+\end{tabularx}
+\caption{Glossaire des termes métier}
+\end{table}
+
+\end{document}

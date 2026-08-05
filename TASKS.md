@@ -37,6 +37,7 @@ Voir `CLAUDE.md` pour le contexte technique complet.
 - Formulaire création (véhicule existant ou nouveau client+véhicule à la volée)
 - Sélection multiple des types d'intervention
 - Génération automatique du numéro `DOS-2026-XXXX`
+- Génération automatique de la fiche d'intervention (PDF, informative, sans QR) à la création
 - Liste des dossiers avec filtres
 - **Commit :** `feat: création et listing des dossiers d'intervention`
 
