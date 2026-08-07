@@ -32,7 +32,8 @@
 \newcommand{\villeEcole}{Casablanca --- Campus Oranger}
 \newcommand{\filiereEtud}{Développement des Systèmes d'Information (DSI) --- 4\textsuperscript{e} année}
 \newcommand{\anneeUniv}{2025 -- 2026}
-\newcommand{\nomEtudiant}{Marwan Saadouni}
+\newcommand{\nomEtudiant}{Marouane Essaadouni}
+\newcommand{\nomEncadrant}{Asmaa Roudane}
 \newcommand{\typeProjet}{Stage de fin d'année}
 
 % ===================== COULEURS =====================
@@ -129,7 +130,7 @@
 
 \begin{tabularx}{0.85\linewidth}{@{}X X@{}}
 \textbf{Réalisé par~:} & \textbf{Encadré par~:} \\[0.15cm]
-\nomEtudiant & \\
+\nomEtudiant & \nomEncadrant \\
 \end{tabularx}
 
 \vspace{1.2cm}
@@ -347,9 +348,11 @@ Tests & Vitest \\
 \begin{itemize}[leftmargin=1cm]
 \item \textbf{Aucune dépendance cloud tierce} pour l'authentification (pas de Clerk, Auth0,
       Supabase Auth) : l'application doit rester autonome.
-\item Les \textbf{Server Actions} sont privilégiées par rapport aux routes API, à l'exception
-      de l'endpoint de vérification du Bon de Sortie, qui doit rester accessible via une route
-      API classique pour être appelable par le scanner.
+\item Les \textbf{Server Actions} sont privilégiées par rapport aux routes API. Les seules
+      exceptions sont l'endpoint de vérification du Bon de Sortie, qui doit rester accessible
+      via une route API classique pour être appelable par le scanner, et les endpoints de
+      génération de documents PDF (fiche d'intervention, Bon de Sortie), qui nécessitent une
+      route API pour renvoyer un flux binaire téléchargeable.
 \item Aucun type \texttt{any} n'est toléré en TypeScript ; la commande \texttt{tsc --noEmit}
       doit systématiquement passer sans erreur.
 \end{itemize}
@@ -774,13 +777,14 @@ app/ \\
 \quad (auth)/login/ \\
 \quad (app)/dashboard/ \\
 \quad (app)/atelier/ \hfill\textcolor{km0graytext}{\% vue Kanban} \\
-\quad (app)/dossiers/[id]/ \\
+\quad (app)/dossiers/, dossiers/new/, dossiers/[id]/ \\
 \quad (app)/clients/ \\
 \quad (app)/vehicules/ \\
 \quad (app)/factures/ \\
 \quad (app)/admin/ \\
 \quad verification/ \hfill\textcolor{km0graytext}{\% hors layout app, accès vigile} \\
 \quad api/verification/route.ts \hfill\textcolor{km0graytext}{\% endpoint scan (POST)} \\
+\quad api/dossiers/[id]/fiche/route.ts \hfill\textcolor{km0graytext}{\% PDF fiche d'intervention} \\
 lib/ \\
 \quad auth/ \hfill\textcolor{km0graytext}{\% session, hashing, guards} \\
 \quad services/ \hfill\textcolor{km0graytext}{\% logique métier} \\
