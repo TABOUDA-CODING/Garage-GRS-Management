@@ -15,6 +15,7 @@ const LINKS_BY_ROLE: Record<Role, NavLink[]> = {
     { href: "/atelier", label: "Atelier" },
     { href: "/clients", label: "Clients" },
     { href: "/vehicules", label: "Véhicules" },
+    { href: "/dossiers", label: "Dossiers" },
     { href: "/factures", label: "Factures" },
     { href: "/admin", label: "Administration" },
   ],
@@ -23,6 +24,7 @@ const LINKS_BY_ROLE: Record<Role, NavLink[]> = {
     { href: "/atelier", label: "Atelier" },
     { href: "/clients", label: "Clients" },
     { href: "/vehicules", label: "Véhicules" },
+    { href: "/dossiers", label: "Dossiers" },
     { href: "/factures", label: "Factures" },
   ],
   TECHNICIEN: [

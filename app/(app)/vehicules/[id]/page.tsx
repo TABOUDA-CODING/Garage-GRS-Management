@@ -2,13 +2,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import type { StatutDossier } from "@prisma/client";
 import { requireRole } from "@/lib/auth/guards";
 import { getVehiculeById } from "@/lib/services/vehicule.service";
 import { deleteVehiculeAction } from "@/app/(app)/vehicules/actions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DeleteVehiculeButton } from "@/components/features/delete-vehicule-button";
+import { STATUT_DOSSIER_LABELS } from "@/lib/utils/labels";
 import {
   Table,
   TableBody,
@@ -17,18 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-const STATUT_LABELS: Record<StatutDossier, string> = {
-  ENTRE: "Entré",
-  EN_DIAGNOSTIC: "En diagnostic",
-  DEVIS_ENVOYE: "Devis envoyé",
-  DEVIS_ACCEPTE: "Devis accepté",
-  DEVIS_REFUSE: "Devis refusé",
-  EN_COURS: "En cours",
-  PRET: "Prêt",
-  SORTI: "Sorti",
-  ANNULE: "Annulé",
-};
 
 export default async function VehiculePage({
   params,
@@ -93,7 +81,17 @@ export default async function VehiculePage({
       </div>
 
       <div className="space-y-3">
-        <h2 className="text-lg font-medium">Historique des dossiers ({vehicule.dossiers.length})</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-medium">Historique des dossiers ({vehicule.dossiers.length})</h2>
+          <Button
+            variant="outline"
+            size="sm"
+            nativeButton={false}
+            render={<Link href={`/dossiers/new?vehiculeId=${vehicule.id}`} />}
+          >
+            Nouveau dossier
+          </Button>
+        </div>
         <div className="rounded-lg border">
           <Table>
             <TableHeader>
@@ -121,7 +119,7 @@ export default async function VehiculePage({
                   </TableCell>
                   <TableCell>{dossier.motifDeclare}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">{STATUT_LABELS[dossier.statut]}</Badge>
+                    <Badge variant="outline">{STATUT_DOSSIER_LABELS[dossier.statut]}</Badge>
                   </TableCell>
                   <TableCell>{format(dossier.dateEntree, "dd/MM/yyyy", { locale: fr })}</TableCell>
                 </TableRow>

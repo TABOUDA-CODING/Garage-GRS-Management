@@ -41,6 +41,13 @@ export async function listVehicules(params: { query?: string; page?: number }) {
   };
 }
 
+export async function listVehiculesForSelect() {
+  return prisma.vehicule.findMany({
+    orderBy: { immatriculation: "asc" },
+    include: { client: { select: { nom: true } } },
+  });
+}
+
 export async function getVehiculeById(id: string) {
   return prisma.vehicule.findUnique({
     where: { id },
