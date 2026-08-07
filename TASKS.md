@@ -1,7 +1,6 @@
 # KM0 — Planning de développement
 
 Une tâche par jour. Cocher au fur et à mesure.
-Voir `CLAUDE.md` pour le contexte technique complet.
 
 ---
 
@@ -9,8 +8,8 @@ Voir `CLAUDE.md` pour le contexte technique complet.
 
 ### [ ] Lundi 4 août — Setup projet
 - Init Next.js 15 + TypeScript strict + Tailwind + shadcn/ui
-- Setup Prisma + schéma complet (voir CLAUDE.md §3) + migration initiale
-- Structure de dossiers (voir CLAUDE.md §7)
+- Setup Prisma + schéma complet + migration initiale
+- Structure de dossiers du projet
 - Seed : 4 utilisateurs (un par rôle), 5 clients (dont 1 État), 8 véhicules, 3 dossiers à différents statuts
 - **Commit :** `chore: setup initial du projet KM0 + schéma Prisma complet`
 
@@ -68,7 +67,7 @@ Voir `CLAUDE.md` pour le contexte technique complet.
 - Page `/verification` plein écran, accès vigile
 - Scan QR caméra + saisie manuelle
 - Endpoint avec transaction atomique (invalidation BS + passage dossier en SORTI)
-- Affichage vert/orange/rouge (voir CLAUDE.md §6)
+- Affichage vert/orange/rouge selon le résultat de la vérification
 - **Commit :** `feat: écran de vérification avec invalidation du bon de sortie`
 
 ### [ ] Vendredi 15 août — Facturation
