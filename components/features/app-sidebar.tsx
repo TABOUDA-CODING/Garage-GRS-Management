@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Role } from "@prisma/client";
 import { logoutAction } from "@/lib/auth/actions";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface NavLink {
   href: string;
@@ -45,6 +46,12 @@ export function AppSidebar({ role, userName }: AppSidebarProps) {
         <p className="text-lg font-semibold">KM0</p>
         <p className="truncate text-sm text-muted-foreground">{userName}</p>
       </div>
+
+      {links.some((link) => link.href === "/vehicules") && (
+        <form action="/vehicules" className="mb-4">
+          <Input type="text" name="q" placeholder="Rechercher un véhicule..." />
+        </form>
+      )}
 
       <nav className="flex-1 space-y-1">
         {links.map((link) => (

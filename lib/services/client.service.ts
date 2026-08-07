@@ -39,6 +39,13 @@ export async function listClients(params: { query?: string; page?: number }) {
   };
 }
 
+export async function listClientsForSelect() {
+  return prisma.client.findMany({
+    orderBy: { nom: "asc" },
+    select: { id: true, nom: true, telephone: true },
+  });
+}
+
 export async function getClientById(id: string) {
   return prisma.client.findUnique({
     where: { id },

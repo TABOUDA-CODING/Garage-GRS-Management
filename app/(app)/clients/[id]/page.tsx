@@ -90,7 +90,17 @@ export default async function ClientPage({
       </div>
 
       <div className="space-y-3">
-        <h2 className="text-lg font-medium">Véhicules ({client.vehicules.length})</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-medium">Véhicules ({client.vehicules.length})</h2>
+          <Button
+            variant="outline"
+            size="sm"
+            nativeButton={false}
+            render={<Link href={`/vehicules/new?clientId=${client.id}`} />}
+          >
+            Nouveau véhicule
+          </Button>
+        </div>
         <div className="rounded-lg border">
           <Table>
             <TableHeader>
@@ -111,7 +121,11 @@ export default async function ClientPage({
               )}
               {client.vehicules.map((vehicule) => (
                 <TableRow key={vehicule.id}>
-                  <TableCell className="font-medium">{vehicule.immatriculation}</TableCell>
+                  <TableCell className="font-medium">
+                    <Link href={`/vehicules/${vehicule.id}`} className="hover:underline">
+                      {vehicule.immatriculation}
+                    </Link>
+                  </TableCell>
                   <TableCell>
                     {vehicule.marque} {vehicule.modele}
                   </TableCell>
