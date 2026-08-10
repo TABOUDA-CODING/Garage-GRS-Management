@@ -1,16 +1,25 @@
 import { differenceInDays } from "date-fns";
 import { StatutDossier } from "@prisma/client";
 import { requireRole } from "@/lib/auth/guards";
+import { prisma } from "@/lib/prisma";
 import { KANBAN_STATUTS, listDossiersAtelier } from "@/lib/services/dossier.service";
 import { STATUT_DOSSIER_LABELS } from "@/lib/utils/labels";
 import { DossierKanbanCard } from "@/components/features/dossier-kanban-card";
 
 export default async function AtelierPage() {
   const session = await requireRole(["RECEPTIONNISTE", "TECHNICIEN", "ADMIN"]);
+  const peutAssigner = session.role !== "TECHNICIEN";
 
-  const dossiers = await listDossiersAtelier({
-    technicienId: session.role === "TECHNICIEN" ? session.userId : undefined,
-  });
+  const [dossiers, techniciens] = await Promise.all([
+    listDossiersAtelier({
+      technicienId: session.role === "TECHNICIEN" ? session.userId : undefined,
+    }),
+    prisma.user.findMany({
+      where: { role: "TECHNICIEN", actif: true },
+      orderBy: { nom: "asc" },
+      select: { id: true, nom: true },
+    }),
+  ]);
 
   const now = new Date();
   const colonnes = KANBAN_STATUTS.map((statut, index) => ({
@@ -49,10 +58,12 @@ export default async function AtelierPage() {
                   marque={dossier.vehicule.marque}
                   modele={dossier.vehicule.modele}
                   typesIntervention={dossier.typesIntervention}
-                  technicienNom={dossier.technicien?.nom ?? null}
+                  technicienId={dossier.technicienId}
                   ancienneteJours={differenceInDays(now, dossier.dateEntree)}
                   statutPrecedent={colonne.precedent}
                   statutSuivant={colonne.suivant}
+                  techniciens={techniciens}
+                  peutAssigner={peutAssigner}
                 />
               ))}
             </div>

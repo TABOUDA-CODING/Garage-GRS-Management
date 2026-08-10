@@ -7,7 +7,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TYPE_INTERVENTION_LABELS } from "@/lib/utils/labels";
-import { changerStatutAction, type ChangerStatutState } from "@/app/(app)/atelier/actions";
+import {
+  assignerTechnicienAction,
+  changerStatutAction,
+  type AssignerTechnicienState,
+  type ChangerStatutState,
+} from "@/app/(app)/atelier/actions";
 
 interface DossierKanbanCardProps {
   dossierId: string;
@@ -16,10 +21,12 @@ interface DossierKanbanCardProps {
   marque: string;
   modele: string;
   typesIntervention: TypeIntervention[];
-  technicienNom: string | null;
+  technicienId: string | null;
   ancienneteJours: number;
   statutPrecedent: StatutDossier | null;
   statutSuivant: StatutDossier | null;
+  techniciens: { id: string; nom: string }[];
+  peutAssigner: boolean;
 }
 
 export function DossierKanbanCard({
@@ -29,15 +36,22 @@ export function DossierKanbanCard({
   marque,
   modele,
   typesIntervention,
-  technicienNom,
+  technicienId,
   ancienneteJours,
   statutPrecedent,
   statutSuivant,
+  techniciens,
+  peutAssigner,
 }: DossierKanbanCardProps) {
   const [state, formAction, isPending] = useActionState<ChangerStatutState | undefined, FormData>(
     changerStatutAction,
     undefined,
   );
+  const [assignState, assignFormAction] = useActionState<AssignerTechnicienState | undefined, FormData>(
+    assignerTechnicienAction,
+    undefined,
+  );
+  const technicienActuel = techniciens.find((t) => t.id === technicienId)?.nom ?? null;
 
   return (
     <Card size="sm">
@@ -59,7 +73,27 @@ export function DossierKanbanCard({
             </Badge>
           ))}
         </div>
-        <p className="text-xs text-muted-foreground">{technicienNom ?? "Non assigné"}</p>
+        {peutAssigner ? (
+          <form action={assignFormAction}>
+            <input type="hidden" name="dossierId" value={dossierId} />
+            <select
+              name="technicienId"
+              defaultValue={technicienId ?? ""}
+              onChange={(event) => event.currentTarget.form?.requestSubmit()}
+              className="h-7 w-full rounded-lg border border-input bg-transparent px-2 text-xs"
+            >
+              <option value="">Non assigné</option>
+              {techniciens.map((technicien) => (
+                <option key={technicien.id} value={technicien.id}>
+                  {technicien.nom}
+                </option>
+              ))}
+            </select>
+          </form>
+        ) : (
+          <p className="text-xs text-muted-foreground">{technicienActuel ?? "Non assigné"}</p>
+        )}
+        {assignState?.error && <p className="text-xs text-destructive">{assignState.error}</p>}
         <p className="text-xs text-muted-foreground">
           {numero} · {ancienneteJours === 0 ? "Entré aujourd'hui" : `Entré il y a ${ancienneteJours} j`}
         </p>

@@ -1,6 +1,7 @@
 import "server-only";
-import { Prisma, StatutDossier, type TypeClient, type TypeIntervention } from "@prisma/client";
+import { Prisma, StatutDossier, type Role, type TypeClient, type TypeIntervention } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { transitionEstAutorisee } from "./dossier-transitions";
 
 export class DossierError extends Error {}
 
@@ -90,7 +91,7 @@ export async function listDossiersAtelier(params: { technicienId?: string }) {
       ...(params.technicienId ? { technicienId: params.technicienId } : {}),
     },
     orderBy: { dateEntree: "asc" },
-    include: { vehicule: { include: { client: true } }, technicien: true },
+    include: { vehicule: { include: { client: true } } },
   });
 }
 
@@ -98,21 +99,21 @@ export async function changerStatutDossier(params: {
   dossierId: string;
   statutCible: StatutDossier;
   userId: string;
+  role: Role;
 }) {
-  if (!KANBAN_STATUTS.includes(params.statutCible as (typeof KANBAN_STATUTS)[number])) {
-    throw new DossierError("Statut cible invalide");
-  }
-
   return prisma.$transaction(async (tx) => {
     const dossier = await tx.dossier.findUnique({ where: { id: params.dossierId } });
     if (!dossier) {
       throw new DossierError("Dossier introuvable");
     }
-    if (!KANBAN_STATUTS.includes(dossier.statut as (typeof KANBAN_STATUTS)[number])) {
-      throw new DossierError("Ce dossier ne peut pas être déplacé depuis l'atelier");
+    if (params.role === "TECHNICIEN" && dossier.technicienId !== params.userId) {
+      throw new DossierError("Ce dossier n'est pas assigné à ce technicien");
     }
     if (dossier.statut === params.statutCible) {
       return dossier;
+    }
+    if (!transitionEstAutorisee(dossier.statut, params.statutCible)) {
+      throw new DossierError("Transition de statut non autorisée");
     }
 
     const updated = await tx.dossier.update({
@@ -130,6 +131,20 @@ export async function changerStatutDossier(params: {
     });
 
     return updated;
+  });
+}
+
+export async function assignerTechnicien(params: { dossierId: string; technicienId: string | null }) {
+  if (params.technicienId) {
+    const technicien = await prisma.user.findUnique({ where: { id: params.technicienId } });
+    if (!technicien || technicien.role !== "TECHNICIEN" || !technicien.actif) {
+      throw new DossierError("Technicien invalide");
+    }
+  }
+
+  return prisma.dossier.update({
+    where: { id: params.dossierId },
+    data: { technicienId: params.technicienId },
   });
 }
 
