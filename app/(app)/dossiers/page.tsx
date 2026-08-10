@@ -4,7 +4,11 @@ import { fr } from "date-fns/locale";
 import type { StatutDossier } from "@prisma/client";
 import { requireRole } from "@/lib/auth/guards";
 import { listDossiers } from "@/lib/services/dossier.service";
-import { STATUT_DOSSIER_LABELS, TYPE_INTERVENTION_LABELS } from "@/lib/utils/labels";
+import {
+  STATUT_DOSSIER_BADGE_VARIANT,
+  STATUT_DOSSIER_LABELS,
+  TYPE_INTERVENTION_LABELS,
+} from "@/lib/utils/labels";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -105,7 +109,9 @@ export default async function DossiersPage({
                   {dossier.typesIntervention.map((type) => TYPE_INTERVENTION_LABELS[type]).join(", ")}
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline">{STATUT_DOSSIER_LABELS[dossier.statut]}</Badge>
+                  <Badge variant={STATUT_DOSSIER_BADGE_VARIANT[dossier.statut]}>
+                    {STATUT_DOSSIER_LABELS[dossier.statut]}
+                  </Badge>
                 </TableCell>
                 <TableCell>{format(dossier.dateEntree, "dd/MM/yyyy", { locale: fr })}</TableCell>
               </TableRow>

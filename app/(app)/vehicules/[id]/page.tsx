@@ -8,7 +8,7 @@ import { deleteVehiculeAction } from "@/app/(app)/vehicules/actions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DeleteVehiculeButton } from "@/components/features/delete-vehicule-button";
-import { STATUT_DOSSIER_LABELS } from "@/lib/utils/labels";
+import { STATUT_DOSSIER_BADGE_VARIANT, STATUT_DOSSIER_LABELS } from "@/lib/utils/labels";
 import {
   Table,
   TableBody,
@@ -119,7 +119,9 @@ export default async function VehiculePage({
                   </TableCell>
                   <TableCell>{dossier.motifDeclare}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">{STATUT_DOSSIER_LABELS[dossier.statut]}</Badge>
+                    <Badge variant={STATUT_DOSSIER_BADGE_VARIANT[dossier.statut]}>
+                      {STATUT_DOSSIER_LABELS[dossier.statut]}
+                    </Badge>
                   </TableCell>
                   <TableCell>{format(dossier.dateEntree, "dd/MM/yyyy", { locale: fr })}</TableCell>
                 </TableRow>

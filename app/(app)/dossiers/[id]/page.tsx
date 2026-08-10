@@ -4,7 +4,11 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { requireRole } from "@/lib/auth/guards";
 import { getDossierById } from "@/lib/services/dossier.service";
-import { STATUT_DOSSIER_LABELS, TYPE_INTERVENTION_LABELS } from "@/lib/utils/labels";
+import {
+  STATUT_DOSSIER_BADGE_VARIANT,
+  STATUT_DOSSIER_LABELS,
+  TYPE_INTERVENTION_LABELS,
+} from "@/lib/utils/labels";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,7 +40,9 @@ export default async function DossierPage({
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-semibold">{dossier.numero}</h1>
-            <Badge variant="outline">{STATUT_DOSSIER_LABELS[dossier.statut]}</Badge>
+            <Badge variant={STATUT_DOSSIER_BADGE_VARIANT[dossier.statut]}>
+              {STATUT_DOSSIER_LABELS[dossier.statut]}
+            </Badge>
           </div>
           <p className="text-sm text-muted-foreground">
             Entré le {format(dossier.dateEntree, "dd/MM/yyyy", { locale: fr })}
@@ -82,7 +88,9 @@ export default async function DossierPage({
                 <TableRow key={entry.id}>
                   <TableCell>{format(entry.createdAt, "dd/MM/yyyy HH:mm", { locale: fr })}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">{STATUT_DOSSIER_LABELS[entry.statutApres]}</Badge>
+                    <Badge variant={STATUT_DOSSIER_BADGE_VARIANT[entry.statutApres]}>
+                      {STATUT_DOSSIER_LABELS[entry.statutApres]}
+                    </Badge>
                   </TableCell>
                   <TableCell>{entry.user.nom}</TableCell>
                 </TableRow>
