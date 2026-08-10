@@ -12,6 +12,21 @@ export const STATUT_DOSSIER_LABELS: Record<StatutDossier, string> = {
   ANNULE: "Annulé",
 };
 
+export const STATUT_DOSSIER_BADGE_VARIANT: Record<
+  StatutDossier,
+  "default" | "secondary" | "destructive" | "outline"
+> = {
+  ENTRE: "outline",
+  EN_DIAGNOSTIC: "outline",
+  DEVIS_ENVOYE: "outline",
+  DEVIS_ACCEPTE: "outline",
+  DEVIS_REFUSE: "destructive",
+  EN_COURS: "outline",
+  PRET: "default",
+  SORTI: "secondary",
+  ANNULE: "destructive",
+};
+
 export const TYPE_INTERVENTION_LABELS: Record<TypeIntervention, string> = {
   DIAGNOSTIC: "Diagnostic",
   REPARATION: "Réparation",
