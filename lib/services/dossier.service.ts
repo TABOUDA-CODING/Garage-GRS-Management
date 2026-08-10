@@ -6,6 +6,13 @@ export class DossierError extends Error {}
 
 const PAGE_SIZE = 10;
 
+export const KANBAN_STATUTS = [
+  StatutDossier.ENTRE,
+  StatutDossier.EN_DIAGNOSTIC,
+  StatutDossier.EN_COURS,
+  StatutDossier.PRET,
+] as const;
+
 export interface CreateDossierInput {
   mode: "existing" | "new";
   vehiculeId?: string;
@@ -73,6 +80,56 @@ export async function getDossierById(id: string) {
       vehicule: { include: { client: true } },
       historique: { orderBy: { createdAt: "asc" }, include: { user: true } },
     },
+  });
+}
+
+export async function listDossiersAtelier(params: { technicienId?: string }) {
+  return prisma.dossier.findMany({
+    where: {
+      statut: { in: [...KANBAN_STATUTS] },
+      ...(params.technicienId ? { technicienId: params.technicienId } : {}),
+    },
+    orderBy: { dateEntree: "asc" },
+    include: { vehicule: { include: { client: true } }, technicien: true },
+  });
+}
+
+export async function changerStatutDossier(params: {
+  dossierId: string;
+  statutCible: StatutDossier;
+  userId: string;
+}) {
+  if (!KANBAN_STATUTS.includes(params.statutCible as (typeof KANBAN_STATUTS)[number])) {
+    throw new DossierError("Statut cible invalide");
+  }
+
+  return prisma.$transaction(async (tx) => {
+    const dossier = await tx.dossier.findUnique({ where: { id: params.dossierId } });
+    if (!dossier) {
+      throw new DossierError("Dossier introuvable");
+    }
+    if (!KANBAN_STATUTS.includes(dossier.statut as (typeof KANBAN_STATUTS)[number])) {
+      throw new DossierError("Ce dossier ne peut pas être déplacé depuis l'atelier");
+    }
+    if (dossier.statut === params.statutCible) {
+      return dossier;
+    }
+
+    const updated = await tx.dossier.update({
+      where: { id: params.dossierId },
+      data: {
+        statut: params.statutCible,
+        historique: {
+          create: {
+            statutAvant: dossier.statut,
+            statutApres: params.statutCible,
+            userId: params.userId,
+          },
+        },
+      },
+    });
+
+    return updated;
   });
 }
 
