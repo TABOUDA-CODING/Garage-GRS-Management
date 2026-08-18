@@ -19,13 +19,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { BonDeSortiePanel } from "@/components/features/bon-de-sortie-panel";
 
 export default async function DossierPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  await requireRole(["RECEPTIONNISTE", "ADMIN"]);
+  const session = await requireRole(["RECEPTIONNISTE", "ADMIN"]);
 
   const { id } = await params;
   const dossier = await getDossierById(id);
@@ -71,6 +72,14 @@ export default async function DossierPage({
         <span className="text-muted-foreground">Motif déclaré</span>
         <span>{dossier.motifDeclare}</span>
       </div>
+
+      <BonDeSortiePanel
+        dossierId={dossier.id}
+        statutDossier={dossier.statut}
+        statutPaiement={dossier.statutPaiement}
+        isAdmin={session.role === "ADMIN"}
+        bonsDeSortie={dossier.bonsDeSortie}
+      />
 
       <div className="space-y-3">
         <h2 className="text-lg font-medium">Historique</h2>

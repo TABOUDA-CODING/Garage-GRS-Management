@@ -80,6 +80,8 @@ export async function getDossierById(id: string) {
     include: {
       vehicule: { include: { client: true } },
       historique: { orderBy: { createdAt: "asc" }, include: { user: true } },
+      bonsDeSortie: { orderBy: { dateGeneration: "desc" }, include: { derogationPar: true } },
+      factures: { orderBy: { createdAt: "desc" } },
     },
   });
 }

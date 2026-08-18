@@ -1,4 +1,4 @@
-import type { StatutDossier, TypeIntervention, TypeClient } from "@prisma/client";
+import type { StatutBS, StatutDossier, StatutPaiement, TypeIntervention, TypeClient } from "@prisma/client";
 
 export const STATUT_DOSSIER_LABELS: Record<StatutDossier, string> = {
   ENTRE: "Entré",
@@ -38,4 +38,31 @@ export const TYPE_CLIENT_LABELS: Record<TypeClient, string> = {
   PARTICULIER: "Particulier",
   ETAT: "État",
   ENTREPRISE: "Entreprise",
+};
+
+export const STATUT_BS_LABELS: Record<StatutBS, string> = {
+  VALIDE: "Valide",
+  UTILISE: "Utilisé",
+  ANNULE: "Annulé",
+};
+
+export const STATUT_BS_BADGE_VARIANT: Record<StatutBS, "default" | "secondary" | "destructive" | "outline"> = {
+  VALIDE: "default",
+  UTILISE: "secondary",
+  ANNULE: "destructive",
+};
+
+export const STATUT_PAIEMENT_LABELS: Record<StatutPaiement, string> = {
+  NON_SOLDE: "Non soldé",
+  PARTIEL: "Partiel",
+  SOLDE: "Soldé",
+};
+
+export const STATUT_PAIEMENT_BADGE_VARIANT: Record<
+  StatutPaiement,
+  "default" | "secondary" | "destructive" | "outline"
+> = {
+  NON_SOLDE: "destructive",
+  PARTIEL: "outline",
+  SOLDE: "default",
 };
