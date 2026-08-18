@@ -1,3 +1,5 @@
+import { VerificationScanner } from "@/components/features/verification-scanner";
+
 export default function VerificationPage() {
-  return <h1 className="text-2xl font-semibold">Vérification</h1>;
+  return <VerificationScanner />;
 }
