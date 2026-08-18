@@ -20,6 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { BonDeSortiePanel } from "@/components/features/bon-de-sortie-panel";
+import { FacturePanel } from "@/components/features/facture-panel";
 
 export default async function DossierPage({
   params,
@@ -72,6 +73,25 @@ export default async function DossierPage({
         <span className="text-muted-foreground">Motif déclaré</span>
         <span>{dossier.motifDeclare}</span>
       </div>
+
+      <FacturePanel
+        dossierId={dossier.id}
+        facture={
+          dossier.factures[0]
+            ? {
+                id: dossier.factures[0].id,
+                numero: dossier.factures[0].numero,
+                montantHT: dossier.factures[0].montantHT.toString(),
+                tauxTVA: dossier.factures[0].tauxTVA.toString(),
+                montantTTC: dossier.factures[0].montantTTC.toString(),
+                statutPaiement: dossier.factures[0].statutPaiement,
+                modePaiement: dossier.factures[0].modePaiement,
+                datePaiement: dossier.factures[0].datePaiement,
+                createdAt: dossier.factures[0].createdAt,
+              }
+            : null
+        }
+      />
 
       <BonDeSortiePanel
         dossierId={dossier.id}
