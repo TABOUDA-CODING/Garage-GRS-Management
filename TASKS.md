@@ -57,20 +57,20 @@ Une tâche par jour. Cocher au fur et à mesure.
 - Tests unitaires sur les transitions (Vitest)
 - **Commit :** `feat: machine à états des dossiers avec traçabilité complète`
 
-### [ ] Mercredi 13 août — Génération du Bon de Sortie
+### [x] Mercredi 13 août — Génération du Bon de Sortie
 - Service de génération avec token QR unique
 - Template PDF A5 (à coller sur pare-brise) : numéro BS, immatriculation en gros, marque/modèle, client, type intervention, date, QR, mention dérogation si applicable
 - Blocage si statut != PRET
 - **Commit :** `feat: génération du bon de sortie en PDF avec QR code`
 
-### [ ] Jeudi 14 août — Écran vérification
+### [x] Jeudi 14 août — Écran vérification
 - Page `/verification` plein écran, accès vigile
 - Scan QR caméra + saisie manuelle
 - Endpoint avec transaction atomique (invalidation BS + passage dossier en SORTI)
 - Affichage vert/orange/rouge selon le résultat de la vérification
 - **Commit :** `feat: écran de vérification avec invalidation du bon de sortie`
 
-### [ ] Vendredi 15 août — Facturation
+### [x] Vendredi 15 août — Facturation
 - Génération facture depuis dossier (HT, TVA 20%, TTC)
 - Enregistrement paiement (mode, date) → mise à jour `statutPaiement`
 - Blocage génération BS si non soldé
@@ -81,7 +81,7 @@ Une tâche par jour. Cocher au fur et à mesure.
 
 ## Semaine 3 — Complétude & finition
 
-### [ ] Lundi 18 août — Dashboard
+### [x] Lundi 18 août — Dashboard
 - Compteurs : véhicules présents par statut, sorties du jour
 - Alertes : dossiers stagnants (+3 jours), factures impayées, devis sans réponse
 - CA jour / semaine / mois
