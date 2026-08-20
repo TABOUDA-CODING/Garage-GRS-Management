@@ -93,7 +93,7 @@ Une tâche par jour. Cocher au fur et à mesure.
 - Page détail dossier avec timeline de l'historique
 - **Commit :** `feat: gestion des pièces utilisées et vue détaillée du dossier`
 
-### [ ] Mercredi 20 août — Administration
+### [x] Mercredi 20 août — Administration
 - Gestion des utilisateurs (CRUD, activation/désactivation)
 - Régénération BS perdu (avec invalidation de l'ancien)
 - Consultation de l'audit trail

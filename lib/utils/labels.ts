@@ -1,4 +1,11 @@
-import type { StatutBS, StatutDossier, StatutPaiement, TypeIntervention, TypeClient } from "@prisma/client";
+import type { Role, StatutBS, StatutDossier, StatutPaiement, TypeIntervention, TypeClient } from "@prisma/client";
+
+export const ROLE_LABELS: Record<Role, string> = {
+  RECEPTIONNISTE: "Réceptionniste",
+  TECHNICIEN: "Technicien",
+  ADMIN: "Administrateur",
+  VIGILE: "Vigile",
+};
 
 export const STATUT_DOSSIER_LABELS: Record<StatutDossier, string> = {
   ENTRE: "Entré",
